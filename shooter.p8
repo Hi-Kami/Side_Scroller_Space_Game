@@ -37,7 +37,9 @@ function _draw()
 	--draw enemy
 	player:draw()
 	--draw interface
-end
+	
+		--print("")
+	end
 -->8
 --player class
 player={x=0,y=0}
@@ -59,7 +61,6 @@ end
 
 function player:draw()
 	spr(0,self.x,self.y)
-	print(self.lazerpoints[1][1])
 end
 
 function player:update()
@@ -70,16 +71,19 @@ function player:update()
   if(btn(2) and self.y>0) self.y -= 1
   if(btn(3) and self.y<119) self.y += 1
  --attack
- 	if(btnp(4)) self:firebullet()
- 	if(btnp(5) and self:missleammo>0) self.firemissle()
+ 	if(btnp(4))self:firebullet()
+ 	if(btnp(5) and self.missleammo>0) self:firemissle()
  
 end
 
 function player:firebullet()
-	if(self.currentlazer==self.maxlazer) then
-		self.currentlazer=0
+
+	if(self.currentlazer>self.maxlazer) then
+		self.currentlazer=1
 	end
-		add(bulletlisthandle, bullet:new(self.lazerpoints[self.currentlazer][1],self.lazerpoints[self.currentlazer][2],true))
+		
+		add(bulletlisthandle,bullet:new(self.lazerpoints[self.currentlazer][1],self.lazerpoints[self.currentlazer][2],true))
+		self.currentlazer+=1
 end
 
 function player:firemissle()
@@ -117,9 +121,9 @@ end
 
 function bullet:render()
 	if(self.d)then--player
-		spr(6, self.x, self.y, 1, 4)
+		spr(6, self.x, self.y, 0.5, 0.2)
 	else--enemy
-		spr(6, self.x, self.y, 5, 8)
+		--spr(6, self.x, self.y, 5, 8)
 	end
 end
 -->8
