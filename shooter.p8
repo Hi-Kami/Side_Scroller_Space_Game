@@ -2,14 +2,18 @@ pico-8 cartridge // http://www.pico-8.com
 version 16
 __lua__
 --ini
-local pl
+local pl--player
 local enemylist
 local bulletlist
+local explosionlist
+local starlist
 
 function _init()
 	pl=player:new(10,64,bulletlist)
 	enemylist={}
 	bulletlist={}
+	explosionlist={}
+	starlist={}
 end
 -->8
 --update
@@ -54,6 +58,8 @@ function player:new(x,y,bulletlisthandle)
 	self.maxlazer=0
 	self.currentlazer=1
 	self.bulletlisthandle=bulletlisthandle
+	self.maxlazer=0
+	self.lazerpoints={}
 	getlistofpixcels(self.lazerpoints,8,0,self.maxlazer)
 	self.__index=self
 	return tmp
@@ -61,6 +67,7 @@ end
 
 function player:draw()
 	spr(0,self.x,self.y)
+	print(self.maxlazer)
 end
 
 function player:update()
@@ -94,7 +101,7 @@ end
 --enemy class
 enemy={x,y}
 -->8
---bullet class
+--bullets & explosions classes
 bullet={x,y,d}
 
 function bullet:new(x,y,d)
@@ -126,13 +133,15 @@ function bullet:render()
 		--spr(6, self.x, self.y, 5, 8)
 	end
 end
+
+explosion={}
 -->8
 --utility func
  	
 function getlistofpixcels(list,col,sprite,ammount)
 	for x=0,8 do
 		for y=0,8 do
-			if(sget(x,y)==col) then 
+			if( sget( ( ( sprite * 8 ) + x ), ( ( sprite * 8 ) + y ) ) == col ) then 
 				add(list,{x,y})
 				ammount+=1
 			end
